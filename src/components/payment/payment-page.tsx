@@ -52,7 +52,7 @@ export function PaymentPage() {
     async function handlePayment() {
         setError(null);
 
-        // Validate UPI ID when UPI is selected
+       
         if (paymentMethod === "upi") {
             if (!upiId.trim()) {
                 setError("Please enter your UPI ID.");
