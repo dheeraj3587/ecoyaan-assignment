@@ -4,14 +4,12 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
     Lock,
-    Loader2,
     ArrowLeft,
     MapPin,
     AlertCircle,
     Smartphone,
     CreditCard,
     Building,
-    Check,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -252,35 +250,67 @@ export function PaymentPage() {
                                 </span>
                             </div>
 
-                            <Button
-                                size="lg"
-                                className={`mt-3 w-full transition-[transform,background-color] duration-500 ${buttonState === "success"
-                                        ? "bg-emerald-500 hover:bg-emerald-500 scale-105"
-                                        : "bg-emerald-600 hover:bg-emerald-700 hover:scale-[1.02] active:scale-[0.98]"
-                                    } text-white`}
-                                onClick={handlePayment}
-                                disabled={buttonState !== "idle"}
-                                aria-label="Pay securely"
-                            >
-                                {buttonState === "success" ? (
-                                    <span className="flex items-center gap-2">
-                                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 animate-in zoom-in duration-300">
-                                            <Check className="h-4 w-4" strokeWidth={3} />
-                                        </span>
-                                        Payment Successful!
-                                    </span>
-                                ) : buttonState === "processing" ? (
-                                    <>
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Processing…
-                                    </>
-                                ) : (
-                                    <>
-                                        <Lock className="mr-2 h-4 w-4" />
+                            <div className="mt-3 flex h-12 w-full justify-center">
+                                <Button
+                                    className={`relative flex h-12 w-full items-center justify-center overflow-hidden text-white transition-all duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] ${
+                                        buttonState === "idle"
+                                            ? "max-w-[400px] rounded-lg bg-emerald-600 hover:scale-[1.02] hover:bg-emerald-700 active:scale-[0.98]"
+                                            : buttonState === "processing"
+                                            ? "max-w-[48px] rounded-full bg-emerald-600 px-0 disabled:opacity-100"
+                                            : "max-w-[48px] rounded-full bg-emerald-500 px-0 shadow-[0_0_20px_rgba(16,185,129,0.5)] disabled:opacity-100"
+                                    }`}
+                                    onClick={handlePayment}
+                                    disabled={buttonState !== "idle"}
+                                    aria-label="Pay securely"
+                                >
+                                    {/* Idle text */}
+                                    <span
+                                        className={`absolute flex items-center justify-center gap-2 whitespace-nowrap transition-opacity duration-300 ${
+                                            buttonState === "idle" ? "opacity-100 delay-200" : "opacity-0"
+                                        }`}
+                                    >
+                                        <Lock className="h-4 w-4" />
                                         Pay Securely · {formatCurrency(grandTotal)}
-                                    </>
-                                )}
-                            </Button>
+                                    </span>
+
+                                    {/* Loading circular spinner */}
+                                    <svg
+                                        className={`absolute h-6 w-6 origin-center text-white transition-opacity duration-300 ${
+                                            buttonState === "processing" ? "animate-spin opacity-100 delay-200" : "opacity-0"
+                                        }`}
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2.5"
+                                        strokeLinecap="round"
+                                    >
+                                        <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                                        <path d="M12 2a10 10 0 0 1 10 10" />
+                                    </svg>
+
+                                    {/* Success checkmark */}
+                                    <svg
+                                        className={`absolute h-6 w-6 text-white transition-transform duration-500 ${
+                                            buttonState === "success" ? "scale-100 opacity-100 delay-300" : "scale-50 opacity-0"
+                                        }`}
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="3"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    >
+                                        <path
+                                            d="M5 13l4 4L19 7"
+                                            style={{
+                                                strokeDasharray: 24,
+                                                strokeDashoffset: buttonState === "success" ? 0 : 24,
+                                                transition: "stroke-dashoffset 0.4s ease-out 0.3s",
+                                            }}
+                                        />
+                                    </svg>
+                                </Button>
+                            </div>
 
                             <p className="pt-1 text-center text-xs text-muted-foreground">
                                 256-bit SSL encrypted payment
