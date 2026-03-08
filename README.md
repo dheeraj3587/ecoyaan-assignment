@@ -2,7 +2,7 @@
 
 A 4-screen checkout flow for the Ecoyaan platform. Built with Next.js 16 App Router, shadcn/ui, and Tailwind CSS v4.
 
-Live: **[deployed URL will be here after Vercel deploy]**
+Live: **https://assingment-6dqpx18t7-dheeraj3587s-projects.vercel.app**
 
 ## Tech Stack
 
@@ -45,8 +45,8 @@ Live: **[deployed URL will be here after Vercel deploy]**
 ## Running Locally
 
 ```bash
-git clone https://github.com/dheeraj3587/ecoyaan-checkout.git
-cd ecoyaan-checkout
+git clone https://github.com/dheeraj3587/ecoyaan-assignment.git
+cd ecoyaan-assignment
 npm install
 npm run dev
 ```
