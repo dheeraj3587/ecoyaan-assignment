@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ecoyaan — Eco-Friendly Checkout Flow
 
-## Getting Started
+A 4-screen checkout flow for the Ecoyaan platform. Built with Next.js 16 App Router, shadcn/ui, and Tailwind CSS v4.
 
-First, run the development server:
+Live: **[deployed URL will be here after Vercel deploy]**
+
+## Tech Stack
+
+| Layer | Choice |
+|---|---|
+| Framework | Next.js 16 (App Router, Server Components) |
+| UI | shadcn/ui + Tailwind CSS v4 |
+| Forms | react-hook-form + Zod |
+| State | React Context + useReducer |
+| Icons | lucide-react |
+| Font | Inter (Google Fonts) |
+
+## Screens
+
+| Route | What it does |
+|---|---|
+| `/` | Cart page — quantity controls, item removal, order summary with eco-impact stat |
+| `/shipping` | Shipping form — name, email, phone (+91), PIN code, city, state dropdown. Zod-validated. Numeric-only inputs for phone/PIN. |
+| `/payment` | Payment method picker (UPI / Card / Net Banking). UPI ID validation. Shows delivery address with edit link. 20% simulated failure rate for demo. |
+| `/success` | Animated confirmation — order ID, delivery estimate, plastic-saved counter |
+
+## Architecture
+
+- **Server-side data fetching** — Cart data loaded in a Server Component (`app/page.tsx` → `lib/cart-data.ts`). No API route self-call.
+- **Layout-level provider** — `CheckoutProvider` in `layout.tsx` persists cart + address state across navigations.
+- **Route-derived stepper** — Progress bar reads `usePathname()` to determine active step. No manual step state.
+- **localStorage persistence** — State saved on every change, restored on mount. Validated on hydration (shape-checked, not blindly trusted). Writes wrapped in try/catch for incognito/restricted browsers.
+- **Redirect guards** — Shipping and payment pages redirect to `/` if required data is missing, via `useEffect` (not during render).
+- **Grand total clamping** — `Math.max(0, ...)` prevents negative totals if discount exceeds subtotal.
+
+## Security
+
+- HTTP headers: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Strict-Transport-Security`, `Referrer-Policy`, `Permissions-Policy` (configured in `next.config.ts`)
+- localStorage data validated with type-guards before hydrating into state
+- UPI ID regex validation before payment submission
+- Images served through Next.js `<Image>` with domain allowlisting
+- Order IDs use timestamp + random for low collision probability
+- `suppressHydrationWarning` on `<html>`/`<body>` to handle browser extension attribute injection
+
+## Running Locally
 
 ```bash
+git clone https://github.com/dheeraj3587/ecoyaan-checkout.git
+cd ecoyaan-checkout
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── app/
+│   ├── page.tsx              # Cart (Server Component)
+│   ├── layout.tsx            # Root layout + CheckoutProvider
+│   ├── loading.tsx           # Cart skeleton
+│   ├── shipping/
+│   │   ├── page.tsx
+│   │   └── loading.tsx
+│   ├── payment/
+│   │   ├── page.tsx
+│   │   └── loading.tsx
+│   └── success/
+│       └── page.tsx
+├── components/
+│   ├── cart/                 # CartItemCard, OrderSummary, CartPage
+│   ├── shipping/             # ShippingPage (form + Zod validation)
+│   ├── payment/              # PaymentPage (method picker + pay CTA)
+│   ├── checkout/             # ProgressStepper
+│   ├── layout/               # Header
+│   └── ui/                   # shadcn primitives
+├── context/
+│   └── checkout-context.tsx  # useReducer + localStorage + validation
+└── lib/
+    ├── cart-data.ts          # Mock cart data
+    ├── types.ts              # TypeScript interfaces
+    └── utils.ts              # formatCurrency, generateOrderId, validators
+```
