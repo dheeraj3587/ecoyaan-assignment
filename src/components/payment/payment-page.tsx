@@ -31,7 +31,7 @@ const UPI_ID_REGEX = /^[\w.-]+@[\w]+$/;
 
 export function PaymentPage() {
     const router = useRouter();
-    const { state, dispatch, subtotal, grandTotal } = useCheckout();
+    const { state, subtotal, grandTotal } = useCheckout();
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("upi");
     const [upiId, setUpiId] = useState("");
     const [buttonState, setButtonState] = useState<ButtonState>("idle");
@@ -70,20 +70,7 @@ export function PaymentPage() {
 
         await new Promise((resolve) => setTimeout(resolve, 2000));
 
-        const paymentFailed = Math.random() < 0.2;
-
-        if (paymentFailed) {
-            setError(
-                "Payment failed. Please try again or use a different payment method."
-            );
-            setButtonState("idle");
-            return;
-        }
-
         setButtonState("success");
-        // Clear both localStorage and in-memory state
-        try { localStorage.removeItem("ecoyaan-checkout"); } catch { /* ignore */ }
-        dispatch({ type: "CLEAR_STATE" });
 
         await new Promise((resolve) => setTimeout(resolve, 1200));
         router.push("/success");

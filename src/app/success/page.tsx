@@ -7,12 +7,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { generateOrderId } from "@/lib/utils";
+import { useCheckout } from "@/context/checkout-context";
 
 export default function SuccessPage() {
+    const { dispatch } = useCheckout();
     const [orderId, setOrderId] = useState("");
     const [stage, setStage] = useState(0);
 
     useEffect(() => {
+        // Clear checkout state now that we're safely on the success page
+        try { localStorage.removeItem("ecoyaan-checkout"); } catch { /* ignore */ }
+        dispatch({ type: "CLEAR_STATE" });
+
         setOrderId(generateOrderId());
         const t1 = setTimeout(() => setStage(1), 100);
         const t2 = setTimeout(() => setStage(2), 600);
@@ -24,7 +30,7 @@ export default function SuccessPage() {
             clearTimeout(t3);
             clearTimeout(t4);
         };
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="flex min-h-[70vh] items-center justify-center px-4">
