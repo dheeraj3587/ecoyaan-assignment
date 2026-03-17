@@ -14,22 +14,22 @@ export function Header() {
     const isSuccess = pathname === "/success";
 
     return (
-        <header className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
-            <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
+        <header className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
+            <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:h-16">
                 <Link
                     href="/"
-                    className="flex items-center gap-2 transition-opacity hover:opacity-80"
+                    className="flex items-center gap-2.5 transition-opacity hover:opacity-80"
                     aria-label="Ecoyaan home"
                 >
                     <Image
                         src="https://prod-cdn.ecoyaan.com/pb-cs-app/images/ecoyaan-favicon.ico"
                         alt="Ecoyaan logo"
-                        width={36}
-                        height={36}
-                        className="rounded-lg"
+                        width={32}
+                        height={32}
+                        className="rounded-lg sm:h-9 sm:w-9"
                         unoptimized
                     />
-                    <span className="text-xl font-bold tracking-tight">Ecoyaan</span>
+                    <span className="text-lg font-bold tracking-tight sm:text-xl">Ecoyaan</span>
                 </Link>
 
                 {!isSuccess && (

@@ -19,9 +19,9 @@ export function OrderSummary() {
 
     return (
         <div className="space-y-4">
-            <Card className="sticky top-24">
+            <Card className="sticky top-20 border-border/60 shadow-sm">
                 <CardHeader className="pb-3">
-                    <CardTitle className="text-lg">Order Summary</CardTitle>
+                    <CardTitle className="text-base font-bold sm:text-lg">Order Summary</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                     <div className="flex justify-between text-sm">
@@ -55,15 +55,18 @@ export function OrderSummary() {
                         </span>
                     </div>
 
-                    <Button
-                        className="mt-2 w-full bg-emerald-600 text-white transition-[transform,background-color] duration-200 hover:bg-emerald-700 hover:scale-[1.02] active:scale-[0.98]"
-                        size="lg"
-                        disabled={isEmpty}
-                        onClick={() => router.push("/shipping")}
-                        aria-label="Proceed to checkout"
-                    >
-                        Proceed to Checkout
-                    </Button>
+                    {/* Desktop-only CTA button */}
+                    <div className="hidden sm:block">
+                        <Button
+                            className="mt-2 w-full bg-emerald-600 text-white transition-all duration-200 hover:bg-emerald-700 hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-emerald-200"
+                            size="lg"
+                            disabled={isEmpty}
+                            onClick={() => router.push("/shipping")}
+                            aria-label="Proceed to checkout"
+                        >
+                            Proceed to Checkout
+                        </Button>
+                    </div>
 
                     <div className="flex items-center justify-center gap-1.5 pt-1">
                         <ShieldCheck className="h-3.5 w-3.5 text-muted-foreground" />

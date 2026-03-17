@@ -16,6 +16,10 @@ export function generateOrderId(): string {
   return `ECO-${timestamp}-${random}`;
 }
 
+export function generateAddressId(): string {
+  return `addr-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 6)}`;
+}
+
 /** Type-guard to validate persisted cart data shape from localStorage */
 export function isValidCartData(data: unknown): boolean {
   if (!data || typeof data !== "object") return false;
@@ -38,6 +42,7 @@ export function isValidShippingAddress(data: unknown): boolean {
   if (!data || typeof data !== "object") return false;
   const obj = data as Record<string, unknown>;
   return (
+    typeof obj.id === "string" &&
     typeof obj.fullName === "string" &&
     typeof obj.email === "string" &&
     typeof obj.phone === "string" &&
@@ -46,4 +51,9 @@ export function isValidShippingAddress(data: unknown): boolean {
     typeof obj.state === "string" &&
     typeof obj.saveAddress === "boolean"
   );
+}
+
+export function isValidSavedAddresses(data: unknown): boolean {
+  if (!Array.isArray(data)) return false;
+  return data.every(isValidShippingAddress);
 }

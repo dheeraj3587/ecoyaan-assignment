@@ -13,9 +13,11 @@ export interface CartData {
 }
 
 export interface ShippingAddress {
+  id: string;
   fullName: string;
   email: string;
   phone: string;
+  addressLine: string;
   pinCode: string;
   city: string;
   state: string;
@@ -25,4 +27,6 @@ export interface ShippingAddress {
 export interface CheckoutState {
   cart: CartData;
   shippingAddress: ShippingAddress | null;
+  savedAddresses: ShippingAddress[];
+  selectedAddressId: string | null;
 }

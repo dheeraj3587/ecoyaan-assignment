@@ -17,7 +17,7 @@ export function ProgressStepper() {
     const currentIndex = stepOrder.indexOf(pathname);
 
     return (
-        <div className="mx-auto mb-8 flex max-w-md items-center justify-between">
+        <div className="mx-auto mb-6 flex max-w-sm items-center justify-between sm:mb-8 sm:max-w-md animate-fade-in">
             {steps.map((step, i) => {
                 const isCompleted = currentIndex > i;
                 const isActive = currentIndex === i;
@@ -25,31 +25,31 @@ export function ProgressStepper() {
 
                 return (
                     <div key={step.path} className="flex items-center">
-                        <div className="flex flex-col items-center gap-1.5">
+                        <div className="flex flex-col items-center gap-1">
                             <div
                                 className={cn(
-                                "flex h-10 w-10 items-center justify-center rounded-full border-2 transition-[border-color,background-color,color,transform] duration-300",
+                                    "flex h-9 w-9 items-center justify-center rounded-full border-2 transition-all duration-300 sm:h-10 sm:w-10",
                                     isCompleted &&
-                                    "border-emerald-600 bg-emerald-600 text-white",
+                                    "border-emerald-600 bg-emerald-600 text-white shadow-md shadow-emerald-200",
                                     isActive &&
-                                    "border-emerald-600 bg-emerald-50 text-emerald-600 scale-110",
+                                    "border-emerald-600 bg-emerald-50 text-emerald-600 scale-110 shadow-md shadow-emerald-100",
                                     !isCompleted &&
                                     !isActive &&
-                                    "border-muted-foreground/30 text-muted-foreground/50"
+                                    "border-muted-foreground/25 text-muted-foreground/40"
                                 )}
                             >
                                 {isCompleted ? (
-                                    <Check className="h-5 w-5" />
+                                    <Check className="h-4 w-4 sm:h-5 sm:w-5" />
                                 ) : (
-                                    <Icon className="h-5 w-5" />
+                                    <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                                 )}
                             </div>
                             <span
                                 className={cn(
-                                    "text-xs font-medium transition-colors",
+                                    "text-[10px] font-semibold tracking-wide uppercase transition-colors sm:text-xs",
                                     isActive && "text-emerald-600",
                                     isCompleted && "text-emerald-600",
-                                    !isActive && !isCompleted && "text-muted-foreground/60"
+                                    !isActive && !isCompleted && "text-muted-foreground/50"
                                 )}
                             >
                                 {step.label}
@@ -59,8 +59,8 @@ export function ProgressStepper() {
                         {i < steps.length - 1 && (
                             <div
                                 className={cn(
-                                    "mx-3 h-0.5 w-12 rounded-full transition-colors duration-300 sm:w-20",
-                                    currentIndex > i ? "bg-emerald-600" : "bg-muted-foreground/20"
+                                    "mx-2 h-0.5 w-8 rounded-full transition-all duration-500 sm:mx-3 sm:w-16",
+                                    currentIndex > i ? "bg-emerald-500" : "bg-muted-foreground/15"
                                 )}
                             />
                         )}
